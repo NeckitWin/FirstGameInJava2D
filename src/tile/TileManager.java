@@ -4,17 +4,23 @@ import main.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class TileManager {
     GamePanel gp;
     Tile[] tile;
+    int[][] mapTileNum;
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
         tile = new Tile[10];
+        mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
 
         getTileImage();
+        loadMap("/maps/world01.txt");
     }
 
     public void getTileImage () {
@@ -26,183 +32,71 @@ public class TileManager {
             tile[1].image = ImageIO.read(getClass().getResourceAsStream("/blocks/dirt.png"));
             tile[2] = new Tile();
             tile[2].image = ImageIO.read(getClass().getResourceAsStream("/blocks/stone.png"));
+            tile[3] = new Tile();
+            tile[3].image = ImageIO.read(getClass().getResourceAsStream("/blocks/bricks.png"));
+            tile[4] = new Tile();
+            tile[4].image = ImageIO.read(getClass().getResourceAsStream("/blocks/water.png"));
+            tile[5] = new Tile();
+            tile[5].image = ImageIO.read(getClass().getResourceAsStream("/blocks/sand.png"));
+            tile[6] = new Tile();
+            tile[6].image = ImageIO.read(getClass().getResourceAsStream("/blocks/tree.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
+    public void loadMap(String filePath) {
+        try {
+            InputStream is = getClass().getResourceAsStream(filePath);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+            int col = 0;
+            int row = 0;
+
+            while (col < gp.maxWorldCol && row < gp.maxWorldRow) {
+                String line = br.readLine();
+
+                while (col < gp.maxWorldCol) {
+                    String numbers[] = line.split(" ");
+
+                    int num = Integer.parseInt(numbers[col]);
+
+                    mapTileNum[col][row] = num;
+                    col++;
+                }
+                if (col == gp.maxWorldCol) {
+                    col = 0;
+                    row++;
+                }
+            }
+            br.close();
+        } catch (Exception e) {
+
+        }
+    }
+
     public void draw(Graphics2D g2) {
-        int x = 0;
-        int y = 0;
-        g2.drawImage(tile[0].image, x,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
+        int worldCol = 0;
+        int worldRow = 0;
 
-        x=0;
-        y+=64;
-        g2.drawImage(tile[1].image, x,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[1].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[1].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[1].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
+        while (worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow) {
 
-        x=0;
-        y+=64;
-        g2.drawImage(tile[1].image, x,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[2].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[2].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[1].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
+            int tileNum = mapTileNum[worldCol][worldRow];
 
-        x=0;
-        y+=64;
-        g2.drawImage(tile[1].image, x,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[2].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[2].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[1].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
+            int worldX = worldCol * gp.tileSize;
+            int worldY = worldRow * gp.tileSize;
+            int screenX = worldX - gp.player.worldX + gp.player.screenX;
+            int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
-        x=0;
-        y+=64;
-        g2.drawImage(tile[1].image, x,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[2].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[2].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[1].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
+            g2.drawImage(tile[tileNum].image, screenX, screenY , gp.tileSize, gp.tileSize, null);
 
+            worldCol++;
 
-        x=0;
-        y+=64;
-        g2.drawImage(tile[0].image, x,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-
-        x=0;
-        y+=64;
-        g2.drawImage(tile[0].image, x,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-
-        x=0;
-        y+=64;
-        g2.drawImage(tile[0].image, x,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-
-        x=0;
-        y+=64;
-        g2.drawImage(tile[0].image, x,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image, x+=64,y, gp.tileSize, gp.tileSize, null);
+            if (worldCol == gp.maxWorldCol) {
+                worldCol = 0;
+                worldRow++;
+            }
+        }
     }
 }
