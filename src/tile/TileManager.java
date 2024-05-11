@@ -11,8 +11,8 @@ import java.io.InputStreamReader;
 
 public class TileManager {
     GamePanel gp;
-    Tile[] tile;
-    int[][] mapTileNum;
+    public Tile[] tile;
+    public int[][] mapTileNum;
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
@@ -23,7 +23,7 @@ public class TileManager {
         loadMap("/maps/world01.txt");
     }
 
-    public void getTileImage () {
+    public void getTileImage() {
 
         try {
             tile[0] = new Tile();
@@ -34,12 +34,15 @@ public class TileManager {
             tile[2].image = ImageIO.read(getClass().getResourceAsStream("/blocks/stone.png"));
             tile[3] = new Tile();
             tile[3].image = ImageIO.read(getClass().getResourceAsStream("/blocks/bricks.png"));
+            tile[3].collision = true;
             tile[4] = new Tile();
             tile[4].image = ImageIO.read(getClass().getResourceAsStream("/blocks/water.png"));
+            tile[4].collision = true;
             tile[5] = new Tile();
             tile[5].image = ImageIO.read(getClass().getResourceAsStream("/blocks/sand.png"));
             tile[6] = new Tile();
             tile[6].image = ImageIO.read(getClass().getResourceAsStream("/blocks/tree.png"));
+            tile[6].collision = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -89,7 +92,13 @@ public class TileManager {
             int screenX = worldX - gp.player.worldX + gp.player.screenX;
             int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
-            g2.drawImage(tile[tileNum].image, screenX, screenY , gp.tileSize, gp.tileSize, null);
+            if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
+                worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
+                worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
+                worldY - gp.tileSize < gp.player.worldY + gp.player.screenY
+            ) {
+                g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+            }
 
             worldCol++;
 

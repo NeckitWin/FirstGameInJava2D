@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 import java.awt.*;
@@ -10,7 +11,7 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel implements Runnable {
     // SCREEN SETTINGS
     final int originalTileSize = 16; // tiles has size 16x16
-    final int scale = 4;
+    final int scale = 3;
 
     public final int tileSize = originalTileSize * scale; // scale size tile.tile to 48x48
     public final int maxScreenCol = 16;
@@ -19,8 +20,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenHeight = tileSize * maxScreenRow;
 
     // WORLD SETTINGS
-    public final int maxWorldCol = 32;
-    public final int maxWorldRow = 18;
+    public final int maxWorldCol = 50;
+    public final int maxWorldRow = 50;
     public final int worldWidth = tileSize * maxWorldCol;
     public final int worldHeight = tileSize * maxWorldRow;
 
@@ -30,7 +31,9 @@ public class GamePanel extends JPanel implements Runnable {
     TileManager tileManager = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
+    public CollisionChecker cChecker = new CollisionChecker(this);
     public Player player = new Player(this, keyH);
+    public SuperObject[] obj = new SuperObject[10];
 
     // Set default position for player
     int playerX = player.worldX;
